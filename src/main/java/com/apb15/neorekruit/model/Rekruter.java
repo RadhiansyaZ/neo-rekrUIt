@@ -1,14 +1,17 @@
 package com.apb15.neorekruit.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rekruter {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,8 +19,8 @@ public class Rekruter {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private Pengguna user;
+    @JoinColumn(name = "pengguna_email", referencedColumnName = "email")
+    private Pengguna pengguna;
 
     @Column(nullable = false)
     private String namaRekruter;
