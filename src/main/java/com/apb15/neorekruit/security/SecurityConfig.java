@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -40,10 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers(
-                "/token/login/**", "/token/refresh/**", "/pengguna/**"
+                "/**"
                 ).permitAll();
-//        http.authorizeRequests().antMatchers(GET, "/pengguna/**").hasAnyAuthority("ROLE_REKRUTER", "ROLE_PENDAFTAR");
-//        http.authorizeRequests().antMatchers(POST, "/pengguna/**").hasAnyAuthority("ROLE_REKRUTER", "ROLE_PENDAFTAR");
+        http.authorizeRequests().antMatchers(POST, "/rekrutmen").hasAnyAuthority("ROLE_REKRUTER");
+        http.authorizeRequests().antMatchers("/rekrutmen/*").hasAnyAuthority("ROLE_REKRUTER");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
