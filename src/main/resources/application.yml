@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    hikari:
+      connectionTimeout: 2000
+      maximumPoolSize: 5
+    url: ${POSTGRES_JDBC}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    basic:
+      enable: false
+  error:
+    whitelabel:
+      enabled: false
+    path: /error-spring
+
+
+
+
