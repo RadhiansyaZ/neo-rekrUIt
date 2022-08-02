@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -15,5 +16,14 @@ public class RekruterServiceImpl implements RekruterService {
     @Override
     public Rekruter createRekruter(Rekruter rekruter) {
         return rekruterRepository.save(rekruter);
+    }
+
+    @Override
+    public Rekruter findByEmail(String email) {
+        var rekruter = rekruterRepository.findRekruterByPenggunaEmail(email);
+
+        if(!rekruter.isPresent()) throw new IllegalStateException("Rekruter not found.");
+
+        return rekruter.get();
     }
 }
