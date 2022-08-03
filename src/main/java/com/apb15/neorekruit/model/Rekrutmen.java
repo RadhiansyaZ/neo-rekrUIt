@@ -1,5 +1,6 @@
 package com.apb15.neorekruit.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +20,7 @@ public class Rekrutmen {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "rekruter", referencedColumnName = "pengguna_email", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Rekruter rekruter;
 
     @Column

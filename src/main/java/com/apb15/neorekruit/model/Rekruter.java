@@ -1,5 +1,6 @@
 package com.apb15.neorekruit.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -28,4 +30,8 @@ public class Rekruter implements Serializable {
 
     @Column(nullable = false)
     private String deskripsiRekruter;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "rekruter", orphanRemoval = false, fetch = FetchType.LAZY)
+    private Collection<Rekrutmen> rekrutmen;
 }
