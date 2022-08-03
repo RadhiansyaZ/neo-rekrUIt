@@ -11,7 +11,7 @@ public interface RekrutmenService {
     Rekrutmen findById(Long id);
     Rekrutmen createRekrutmen(String emailRekruter, Rekrutmen rekrutmen);
     Collection<Pendaftaran> findAllPendaftaran(Long idRekrutmen);
-    Rekrutmen updateRekrutmen(String emailRekruter, Long idRekrutmen, Rekrutmen rekrutmen);
+    Rekrutmen updateRekrutmen(Long idRekrutmen, Rekrutmen rekrutmen);
     void deleteRekrutmen(Long idRekrutmen);
     Collection<Pengumuman> findAllPengumuman(Long idRekrutmen);
 }

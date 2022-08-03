@@ -52,13 +52,9 @@ public class RekrutmenController {
     @PutMapping("/{idRekrutmen}")
     @ResponseBody
     public ResponseEntity<Rekrutmen> updateRekrutmen(@PathVariable(value = "idRekrutmen") Long idRekrutmen,
-                                                     @RequestBody Rekrutmen rekrutmen,
-                                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+                                                     @RequestBody Rekrutmen rekrutmen) {
         try {
-            var decodedJWT = JWTUtils.decodeJWTToken(authHeader.substring("Bearer ".length()));
-            var emailFromJWT = decodedJWT.getSubject();
-
-            var updatedRekrutmen = rekrutmenService.updateRekrutmen(emailFromJWT, idRekrutmen, rekrutmen);
+            var updatedRekrutmen = rekrutmenService.updateRekrutmen(idRekrutmen, rekrutmen);
             return ResponseEntity.ok().body(updatedRekrutmen);
         } catch(IllegalStateException exception) {
             return ResponseEntity.notFound().build();
