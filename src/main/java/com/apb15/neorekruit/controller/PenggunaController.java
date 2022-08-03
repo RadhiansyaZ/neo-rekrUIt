@@ -6,13 +6,17 @@ import com.apb15.neorekruit.model.Pendaftar;
 import com.apb15.neorekruit.model.Pengguna;
 import com.apb15.neorekruit.model.Rekruter;
 import com.apb15.neorekruit.model.Role;
+import com.apb15.neorekruit.security.JWTUtils;
 import com.apb15.neorekruit.service.PendaftarService;
 import com.apb15.neorekruit.service.PenggunaService;
 import com.apb15.neorekruit.service.RekruterService;
 import com.apb15.neorekruit.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -30,9 +34,20 @@ public class PenggunaController {
     private final RekruterService rekruterService;
     private final PendaftarService pendaftarSevice;
 
-    @GetMapping
-    public ResponseEntity<List<Pengguna>> getAllPengguna() {
-        return ResponseEntity.ok().body(penggunaService.getAllPengguna());
+    @GetMapping("/rekruter")
+    @ResponseBody
+    public ResponseEntity<?> findRekrutmenCreated(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        try {
+            var token = authHeader.substring("Bearer ".length());
+            var emailPendaftar = JWTUtils.decodeJWTToken(token).getSubject();
+
+            var rekruter = rekruterService.findByEmail(emailPendaftar);
+            var rekrutmenCreated = rekruter.getRekrutmen();
+
+            return ResponseEntity.ok().body(rekrutmenCreated);
+        } catch (RuntimeException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot get Pendaftaran", exception);
+        }
     }
 
     @PostMapping("/rekruter")
@@ -66,6 +81,22 @@ public class PenggunaController {
             return ResponseEntity.created(uri).body(createdRekruter);
         } catch (IllegalStateException exception) {
             return null;
+        }
+    }
+
+    @GetMapping("/pendaftar")
+    @ResponseBody
+    public ResponseEntity<?> findPendaftaranCreated(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        try {
+            var token = authHeader.substring("Bearer ".length());
+            var emailPendaftar = JWTUtils.decodeJWTToken(token).getSubject();
+
+            var pendaftar = pendaftarSevice.findByEmail(emailPendaftar);
+            var pendaftaranCreated = pendaftar.getMendaftar();
+
+            return ResponseEntity.ok().body(pendaftaranCreated);
+        } catch (RuntimeException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot get Pendaftaran", exception);
         }
     }
 
