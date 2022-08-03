@@ -2,7 +2,9 @@ package com.apb15.neorekruit.security.filter;
 
 import com.apb15.neorekruit.dto.ErrorResponse;
 import com.apb15.neorekruit.security.JWTUtils;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +23,7 @@ import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -43,16 +46,17 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(email, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                } catch (Exception exception) {
-                    System.out.println("Error");
+                } catch (JWTVerificationException exception) {
+                    log.error(exception.getMessage());
 
                     ErrorResponse error = ErrorResponse.builder()
-                            .errorMsg(exception.getMessage())
+                            .errorMsg("There is an error with the JWT")
                             .build();
 
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.setContentType(APPLICATION_JSON_VALUE);
                     response.getWriter().write(error.toString());
+                    return;
                 }
             }
         }

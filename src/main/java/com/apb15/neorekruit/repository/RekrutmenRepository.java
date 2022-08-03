@@ -14,4 +14,6 @@ public interface RekrutmenRepository extends JpaRepository<Rekrutmen, Long> {
     Optional<Rekrutmen> findById(Long id);
     @Override
     void deleteById(Long id);
+
+
 }
