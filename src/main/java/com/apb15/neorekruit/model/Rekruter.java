@@ -17,11 +17,10 @@ import java.util.Collection;
 @AllArgsConstructor
 public class Rekruter implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private Long id;
 
     @OneToOne
+    @MapsId
     @JoinColumn(name = "pengguna_email", referencedColumnName = "email")
     private Pengguna pengguna;
 
