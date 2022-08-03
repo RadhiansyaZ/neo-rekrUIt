@@ -1,6 +1,7 @@
 package com.apb15.neorekruit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -58,9 +59,11 @@ public class Rekrutmen {
     @JsonProperty("link_wawancara")
     private String linkWawancara;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "rekrutmen", orphanRemoval = true, fetch = FetchType.LAZY)
     private Collection<Pendaftaran> pendaftaranRekrutmen = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "rekrutmen", orphanRemoval = true, fetch = FetchType.LAZY)
     private Collection<Pengumuman> pengumumanRekrutmen = new ArrayList<>();
 }

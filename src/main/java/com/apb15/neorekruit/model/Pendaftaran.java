@@ -1,5 +1,6 @@
 package com.apb15.neorekruit.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Data;
 
@@ -30,6 +31,7 @@ public class Pendaftaran {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "rekrutmen_id", nullable = false)
+    @JsonBackReference
     private Rekrutmen rekrutmen;
 
 }

@@ -1,10 +1,12 @@
 package com.apb15.neorekruit.service;
 
 import com.apb15.neorekruit.model.Pendaftaran;
+import com.apb15.neorekruit.model.Pengumuman;
 import com.apb15.neorekruit.model.Rekruter;
 import com.apb15.neorekruit.model.Rekrutmen;
 import com.apb15.neorekruit.repository.RekrutmenRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -18,6 +20,14 @@ public class RekrutmenServiceImpl implements RekrutmenService {
     @Override
     public Collection<Rekrutmen> findAllRekrutmen() {
         return rekrutmenRepository.findAll();
+    }
+
+    @Override
+    public Rekrutmen findById(Long idRekrutmen) {
+        var rekrutmenOptional = rekrutmenRepository.findById(idRekrutmen);
+        if(!rekrutmenOptional.isPresent()) throw new ObjectNotFoundException(idRekrutmen, "Rekrutmen");
+
+        return rekrutmenOptional.get();
     }
 
     @Override
@@ -59,5 +69,16 @@ public class RekrutmenServiceImpl implements RekrutmenService {
             throw new IllegalStateException("Rekrutmen not found");
         }
         rekrutmenRepository.deleteById(idRekrutmen);
+    }
+
+    @Override
+    public Collection<Pengumuman> findAllPengumuman(Long idRekrutmen) {
+        var rekrutmenOptional = rekrutmenRepository.findById(idRekrutmen);
+
+        if(!rekrutmenOptional.isPresent()) throw new ObjectNotFoundException(idRekrutmen, "Rekrutmen");
+
+        var pengumuman = rekrutmenOptional.get().getPengumumanRekrutmen();
+
+        return pengumuman;
     }
 }
