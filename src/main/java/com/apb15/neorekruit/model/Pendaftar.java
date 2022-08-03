@@ -1,5 +1,6 @@
 package com.apb15.neorekruit.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +17,10 @@ import java.util.Collection;
 @AllArgsConstructor
 public class Pendaftar {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne
+    @MapsId
     @JoinColumn(name = "pengguna_email", referencedColumnName = "email")
     private Pengguna pengguna;
 
@@ -35,6 +36,7 @@ public class Pendaftar {
     @Column
     private String kontak;
 
-    @OneToMany(mappedBy = "pendaftar", orphanRemoval = true)
+    @OneToMany(mappedBy = "pendaftar")
+    @JsonManagedReference("pendaftaran-pendaftar")
     private Collection<Pendaftaran> mendaftar = new ArrayList<>();
 }

@@ -60,7 +60,7 @@ public class Rekrutmen {
     @JsonProperty("link_wawancara")
     private String linkWawancara;
 
-    @JsonManagedReference
+    @JsonManagedReference("pendaftaran-rekrutmen")
     @OneToMany(mappedBy = "rekrutmen", orphanRemoval = true, fetch = FetchType.LAZY)
     private Collection<Pendaftaran> pendaftaranRekrutmen = new ArrayList<>();
 

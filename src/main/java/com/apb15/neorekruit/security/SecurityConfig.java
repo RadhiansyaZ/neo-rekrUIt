@@ -35,17 +35,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/token/login");
 
-        http.csrf().disable();
+        http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers(
                 "/**"
                 ).permitAll();
+
         http.authorizeRequests().antMatchers(POST, "/rekrutmen").hasAnyAuthority("ROLE_REKRUTER");
         http.authorizeRequests().antMatchers("/rekrutmen/*").hasAnyAuthority("ROLE_REKRUTER");
+
         http.authorizeRequests().antMatchers(POST, "/rekrutmen/**/pengumuman").hasAnyAuthority("ROLE_REKRUTER");
         http.authorizeRequests().antMatchers(PUT, "/rekrutmen/**/pengumuman/*").hasAnyAuthority("ROLE_REKRUTER");
         http.authorizeRequests().antMatchers(DELETE, "/rekrutmen/**/pengumuman/*").hasAnyAuthority("ROLE_REKRUTER");
+
+        http.authorizeRequests().antMatchers(POST, "/rekrutmen/**/pendaftaran").hasAnyAuthority("ROLE_PENDAFTAR");
+        http.authorizeRequests().antMatchers(GET,"/rekrutmen/**/pendaftaran/*").hasAnyAuthority("ROLE_PENDAFTAR",
+                "ROLE_REKRUTER");
+        http.authorizeRequests().antMatchers(PUT, "/rekrutmen/**/pendaftaran/*").hasAnyAuthority("ROLE_REKRUTER");
+        http.authorizeRequests().antMatchers(POST, "/rekrutmen/**/pendaftaran/**/ubahstatus").hasAnyAuthority(
+                "ROLE_REKRUTER");
+
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
